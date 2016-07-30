@@ -1,0 +1,251 @@
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <time.h>
+struct game{ 
+	int num;
+	char name[10];
+	int win;
+	int lose;
+	int score;
+
+};                    //定义游戏排行榜的结构体
+void main()//主函数开始
+{
+	char Human,Computer;
+	int i,j,k,n,win,lose,deuce,choice;
+	void menu1();              //菜单函数1.2.3的声明
+	void menu2();
+	void menu3();
+	void lianximoshi();         //两种模式的声明
+	void duizhanmoshi();
+    struct game s[50];
+	void input_player(struct game *s,int k);
+	void sort_player(struct game s[],int n);
+    void output_player(struct game s[],int n);
+    srand(time(NULL));               //产生随机数	
+do                //do-while控制外循环
+{	
+win=0,lose=0,deuce=0;  //这个初值化很重要，涉及到第二次游戏对决的结果
+menu1();
+printf("请做出你的选择：");
+scanf("%d",&choice);    //用条件分支语句控制游戏大局i（有choice==1,choice==2,choice==3的分支）
+if(choice==1)      //玩家选择练习模式的开始
+lianximoshi();
+else if(choice==2)                    //玩家选择游戏模式的开始 
+{   printf("请输入玩家个数，谢谢! ：");
+    scanf("%d",&n);
+	for(k=0;k<n;k++)               //设置循环体，控制输出排行榜的的人数
+	{
+		duizhanmoshi();
+
+		input_player(s,k);              //输入玩家信息
+	}
+	sort_player(s,n);            //比较玩家信息，利用选择排序法将玩家的情况排序
+	printf("\n                   输出排行榜     \n");
+	output_player(s,n);        //调用output_player函数，输出排行榜
+	
+}
+else if(choice==3)                 //玩家选择退出
+	printf("⊙⊙温馨提示⊙⊙\t你退出游戏了哦\n");
+}while(choice==1||choice==2);
+}                              //主函数结束
+
+void menu1()         //定义菜单函数1
+{  
+	printf("\t\t********************************************** \n");
+	printf("\t\t*           欢迎来到石头剪刀布游戏           *\n");
+	printf("\t\t**********************************************\n");
+	printf("\t\t*                                            *\n");
+	printf("\t\t*        说明:练习模式，请按1                *\n");
+	printf("\t\t*             游戏模式，请按2                *\n");
+	printf("\t\t*             退出游戏，请按3                *\n");
+    printf("\t\t**********************************************\n");	
+	return;
+}
+void menu2()   //定义菜单函数2
+{
+	printf("\t\t**********************************************\n");
+	printf("\t\t*              欢迎来到练习模式              *\n");
+	printf("\t\t**********************************************\n");
+	printf("\t\t* 说明：         三局两胜制                  *\n");
+	printf("\t\t*      欢迎你来到石头剪刀布游戏的练习模式    *\n");
+	printf("\t\t*    在这里你们可以尽情玩耍，可以无限制地玩  *\n");
+	printf("\t\t*    希望你们有一个好的游戏体验 ！           *\n");
+	printf("\t\t*                                            *\n"); 
+	printf("\t\t*  用户操作:                                 *\n"); 
+	printf("\t\t*                                            *\n");
+	printf("\t\t*         1-石头 2-剪刀 3-布  4-退出         *\n"); 
+	printf("\t\t**********************************************\n");
+	return;
+}
+void menu3()           //定义菜单函数3
+{
+	printf("\t\t**********************************************\n");
+	printf("\t\t*              欢迎来到对战模式              *\n");
+	printf("\t\t**********************************************\n");
+	printf("\t\t*                                            *\n");
+	printf("\t\t* 说明:         三局两胜制                   *|\n");
+	printf("\t\t*      在这里你们将会进行实名登记，然后系统  *\n");
+	printf("\t\t*    会帮你们统计你们的游戏结果，得出排名，  *\n");
+	printf("\t\t*    希望你们玩得开心！                      *\n");
+	printf("\t\t*                                            *\n"); 
+	printf("\t\t*  用户操作:                                 *\n"); 
+	printf("\t\t*                                            *\n");
+	printf("\t\t*         1-石头 2-剪刀 3-布  4-退出         *\n"); 
+	printf("\t\t**********************************************\n");
+	return;
+}
+
+void lianximoshi()//练习模式的子函数
+{ 	
+	char Human,Computer;
+	int i,j,win=0,lose=0,deuce=0,result;
+	srand(time(NULL));
+	menu2();
+	for(j=0;j<3;j++)           //三局游戏的循环体控制
+	{
+		printf("第%d场比赛开始",j+1);
+		printf("你的选择(1、2、3): ");
+	
+	while(1)                      //设计人与电脑的对战的while循环
+	{ 
+		Human = getch();
+		if(Human=='1'||Human=='2'||Human=='3'||Human=='4')
+		{
+			printf("%C\t",Human);break;
+		}
+	}                                                         
+	if(Human=='4') break;
+			switch(Human)     //判断开始游戏的真正对弈，人的主动选择
+			{
+			case '1': printf("石头VS ");break;
+			case '2': printf("剪刀VS ");break;
+			case '3': printf("布VS ");break;
+			}
+            Computer = rand()%3+1+48;
+            switch(Computer)       //电脑的随机选择
+			{ 
+            case '1': printf("石头\n");break;
+            case '2': printf("剪刀\n");break;
+            case '3': printf("布\n");break;
+			}
+			result=Human-Computer;    //游戏结果的运算
+			switch(result)       
+			{
+			case 0:deuce++;break;
+			case -1:case 2:win++;break;
+			case 1:case -2:lose++;break;
+			}
+	}
+    printf("\n⊙⊙温馨提示⊙⊙  游戏结束\n");                         
+
+	    if(win==lose)               //分出胜负
+		{
+    printf("\n⊙⊙比赛结果⊙⊙\t我们打成平手哦\n");
+		}
+		else if(win>lose)
+		{
+    printf("\n⊙⊙比赛结果⊙⊙\t电脑，我赢了哦\n");
+		}
+		else if(win<lose)
+		{
+	printf("\n⊙⊙比赛结果⊙⊙\t电脑，你赢了，但我不服，要再战一回合\n");
+		
+		} 
+return ;
+}                   
+void duizhanmoshi()      //定义对战模式的自定义函数  
+{
+    char Human,Computer;
+	int i,j,win=0,lose=0,deuce=0,result,score=0;
+	srand(time(NULL));
+	menu3();
+	for(j=0;j<3;j++)               //for循环的开始，有限循环，满足三局两胜制
+	{
+	
+		printf("第%d场比赛开始\n", j+1 );
+		printf("你的选择(1、2、3):    ");
+		
+	  
+	while(1)                            //设计人与电脑的对战的while循环
+	{ 
+		Human = getch();          
+		if(Human=='1'||Human=='2'||Human=='3'||Human=='4')
+		{
+			printf("%c\t",Human);break;
+		}
+	}                            //for循环的结束
+	if(Human=='4') break;
+			switch(Human)                //判断开始游戏的真正对弈，人的主动选择
+		
+			{
+			case '1': printf("石头VS ");break;
+			case '2': printf("剪刀VS ");break;
+			case '3': printf("布VS ");break;
+			}
+            Computer = rand()%3+1+48;
+            switch(Computer)                 //电脑的随机选择
+			{ 
+            case '1': printf("石头\n");break;
+            case '2': printf("剪刀\n");break;
+            case '3': printf("布\n");break;
+			}
+			result=Human-Computer;      //游戏结果的运算
+			switch(result)
+			{
+			case 0:deuce++;break;
+			case -1:case 2:win++;break;
+			case 1:case -2:lose++;break;
+			}
+		}
+	    score=win*2+deuce*1;
+		printf("\n⊙⊙温馨提示⊙⊙比赛结束\n");
+		printf("\n================================================\n");
+		printf("\n      赢了%d场，输了%d场，积分为%d              \n",win,lose,score);
+		printf("\n================================================\n");
+		if(win==lose)                    //分出胜负
+		{
+            printf("\n⊙⊙比赛结果⊙⊙我们打成平手哦\n");
+		}
+		else if(win>lose)
+		{
+			printf("\n⊙⊙比赛结果⊙⊙电脑，我赢了哦\n");
+		}
+		else if(win<lose)
+		{
+			printf("\n⊙⊙比赛结果⊙⊙电脑，你赢了，但我不服，要再战一回合\n");
+		
+		}  
+return ;
+}    
+void input_player(struct game *s,int k)//自定义输入玩家信息的函数
+{
+	printf("\n请输入你的游戏信息，学号，姓名，赢的次数，输的次数，积分。谢谢!\n");
+	scanf("%10d%s%d%d%d",&s[k].num,s[k].name,&s[k].win,&s[k].lose,&s[k].score);	
+}
+
+
+void sort_player(struct game s[],int n)  //选择排序法，将玩家信息按照积分score的大小排名
+{
+int k,g,index;
+struct game temp;
+for(k=0;k<n-1;k++)
+{
+index=k;
+for(g=k;g<n;g++)
+{
+if(s[g].score>s[index].score) index=g;
+temp=s[k];s[k]=s[index];s[index]=temp;
+}
+}
+}
+
+
+void output_player(struct game s[],int n)    //输出玩家信息
+{
+int k;
+printf("学号     姓名       赢局      输局    积分\n");
+for(k=0;k<n;k++)
+printf("%-10d%-10s%-10d%-10d%-10d\n",s[k].num,s[k].name,s[k].win,s[k].lose,s[k].score);
+}
