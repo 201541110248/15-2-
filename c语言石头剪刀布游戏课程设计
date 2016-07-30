@@ -221,7 +221,7 @@ return ;
 }    
 void input_player(struct game *s,int k)//自定义输入玩家信息的函数
 {
-	printf("\n请输入你的游戏信息，学号，姓名，赢的次数，输的次数，积分。谢谢!\n");
+	printf("\n请输入你的游戏信息，学号（后四位数），姓名，赢的次数，输的次数，积分。谢谢!\n");
 	scanf("%10d%s%d%d%d",&s[k].num,s[k].name,&s[k].win,&s[k].lose,&s[k].score);	
 }
 
